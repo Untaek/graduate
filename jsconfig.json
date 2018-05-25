@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+    "sourceMap": true,
+    "watch": true,
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ]
+}
