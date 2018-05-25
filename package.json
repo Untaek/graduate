@@ -1,0 +1,31 @@
+{
+  "name": "graduate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "debug": "^3.1.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "handlebars": "^4.0.11",
+    "lodash": "^4.17.5",
+    "mongodb": "^3.0.7",
+    "morgan": "^1.9.0",
+    "mosca": "^2.8.1",
+    "mqtt": "^2.17.0",
+    "serve-favicon": "^2.5.0"
+  },
+  "scripts": {
+    "broker": "nodemon --exec npx babel-node broker.js",
+    "server": "nodemon --exec npx babel-node server/index.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.17.3",
+    "supertest": "^3.1.0"
+  }
+}
