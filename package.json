@@ -17,11 +17,12 @@
     "mosca": "^2.8.1",
     "mqtt": "^2.17.0",
     "mysql": "^2.15.0",
+    "redis": "^2.8.0",
     "serve-favicon": "^2.5.0",
     "uuid": "^3.2.1"
   },
   "scripts": {
-    "broker": "nodemon --exec npx babel-node broker.js",
+    "broker": "nodemon --exec npx babel-node server/mqtt/broker.js",
     "server": "nodemon --exec npx babel-node server/index.js"
   },
   "devDependencies": {

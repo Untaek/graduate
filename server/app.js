@@ -13,7 +13,7 @@ app.engine(
   hbs({
     extname: 'hbs',
     defaultLayout: 'layout',
-    layoutsDir: path.resolve(__dirname, 'views', 'layouts'),
+    layoutsDir: path.resolve(__dirname, 'views', 'layouts')
   })
 )
 app.set('views', path.resolve(__dirname, 'views'))
@@ -25,6 +25,5 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(router)
-console.log()
 
 export default app

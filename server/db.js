@@ -55,7 +55,7 @@ class NoSQL {
       },
       (err, result) => {
         bucket.get(id, (err, result) => {
-          console.log(result)
+          console.log('Inserted into couchbase\n', result.value)
         })
       }
     )
