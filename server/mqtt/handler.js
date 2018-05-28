@@ -9,22 +9,24 @@ const IDENTIFICATION = 'identification'
 const handler = () => {
   /** @param {MQTT.MqttClient} mqtt */
   const handle = mqtt => {
-    const basicSub = () => {
+    const basicSub = dev => {
       if (mqtt.connected) {
         mqtt.subscribe(IDENTIFICATION)
         mqtt.subscribe(SENSOR_VALUE)
         // For example
-        setInterval(() => {
-          mqtt.publish(
-            SENSOR_VALUE,
-            JSON.stringify({
-              device_id: _.random(1, 100, false),
-              owner_id: _.random(1000, 2000, false),
-              sensor_type: 'weight',
-              measured_value: _.random(2, 15, true).toFixed(4)
-            })
-          )
-        }, 2)
+        if (dev) {
+          setInterval(() => {
+            mqtt.publish(
+              SENSOR_VALUE,
+              JSON.stringify({
+                device_id: _.random(1, 100, false),
+                owner_id: _.random(100, 200, false),
+                sensor_type: 'weight',
+                measured_value: _.random(2, 15, true).toFixed(4)
+              })
+            )
+          }, 1)
+        }
       }
     }
 
@@ -34,10 +36,9 @@ const handler = () => {
 
     mqtt.on('connect', listener)
     mqtt.on('message', (topic, message) => {
-      console.log('on message:', topic, message.toString())
+      //console.log('on message:', topic, message.toString())
       const json = JSON.parse(message)
       let obj = {}
-      console.log(json)
       switch (topic) {
         case SENSOR_VALUE:
           obj = {
@@ -47,6 +48,7 @@ const handler = () => {
             measuredValue: json.measured_value
           }
           couch.push(obj)
+          couch.N1qlQuery.fromString()
           break
         case IDENTIFICATION:
           obj = {

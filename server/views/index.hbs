@@ -1,6 +1,22 @@
-<h1> {{title}} </h1>
-<ul>
-{{#each array as |val key|}}
-  <li>{{ key }}: {{ val }}</li>
-{{/each}}
-</ul>
+<div style="padding-left:16px">
+  <h2>{{serial}} 님 안녕하세요!</h2>
+  <hr>
+</div>
+
+<div style="height:70%">
+  <div class="content" id="id" style="display:flex">
+    <div>
+      <ul>
+        {{#each dogs}}
+        <li>{{name}}</li>
+        {{/each}}
+      </ul>
+      <h2>강아지 프로필 </h2>
+      <img src="rabbit.svg" style="display:block" />
+      <button class="w3-button w3-white w3-border">수정</button>
+    </div>
+    <div>
+      별명: M37652
+    </div>
+  </div>
+</div>
