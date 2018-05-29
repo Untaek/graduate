@@ -12,15 +12,20 @@
   </tr>
 </table>
 <div id="maintext" align="center">
-  <h1>강아지기반케어시스템에 오신걸 환영합니다.</h1>
+  <h1>강아지 케어 시스템에 오신 것을 환영합니다.</h1>
 </div>
 <div style="text-align:center">
-  <form style="height:100%" method="POST" action="register">
-    <input type="text" name="serial" id="name" placeholder="일련번호를 입력하세요. " />
-    <input type="submit" class="button-1" value="확인"/>
+  {{#if serial}}
+  <h2>이미 등록 되어 있는 기기가 있습니다. 변경하시겠습니까?</h2>
+  <p>기존의 기기 일련 번호: {{serial}}</p>
+  {{else}} {{#if duplicate}}
+  <h2>기기 일련번호가 중복 되었습니다!</h2>
+  {{/if}}{{/if}}
+  <form style="height:100%" method="POST" action="register" style="text-align: center;">
+    <input type="text" name="serial" id="name" placeholder="일련번호를 입력하세요. ">
+    <input type="submit" class="button-1" value="확인">
   </form>
   <p>
     <MARQUEE scrollAmount=12 direction=right style=background:firebrick>일련번호는 기계뒷편에 있습니다.^^</MARQUEE>
   </p>
-
 </div>

@@ -1,0 +1,186 @@
+<canvas id="mealChart" width="200" height="100"></canvas>
+<canvas id="waterChart" width="200" height="100"></canvas>
+<canvas id="weightChart" width="200" height="100"></canvas>
+<canvas id="barkChart" width="200" height="100"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script>
+var mealctx = document.getElementById("mealChart").getContext('2d');
+var mealChart = new Chart(mealctx, {
+    type: 'line',
+    data: {
+        labels: ["일", "월", "화", "수", "목", "금", "토"],
+        datasets: [{
+            
+            label: '섭취량',
+            data: [12, 12.5, 12.8, 12.3, 12.1, 12.2, 12.4],
+            backgroundColor: [
+                'rgba(1, 111, 111, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        title: {
+          display: true,
+          text: '일주일간의 식사량',
+          fontSize: 20
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:false
+                }
+            }]
+        }
+    }
+});
+var waterctx = document.getElementById("waterChart").getContext('2d');
+var waterChart = new Chart(waterctx, {
+    type: 'line',
+    data: {
+        labels: ["일", "월", "화", "수", "목", "금", "토"],
+        datasets: [{
+            label: '물 섭취량',
+            data: [12, 12.5, 12.8, 12.3, 12.1, 12.2, 12.4],
+            backgroundColor: [
+                'rgba(100, 99, 1, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+      title: {
+          display: true,
+          text: '일주일간의 물 섭취량',
+          fontSize: 20
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:false
+                }
+            }]
+        }
+    }
+});
+var weightctx = document.getElementById("weightChart").getContext('2d');
+var weightChart = new Chart(weightctx, {
+    type: 'line',
+    data: {
+        labels: ["일", "월", "화", "수", "목", "금", "토"],
+        datasets: [{
+            label: '체중',
+            data: [12, 12.5, 12.8, 12.3, 12.1, 12.2, 12.4],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+      title: {
+          display: true,
+          text: '일주일간의 몸무게 변화',
+          fontSize: 20
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:false
+                }
+            }]
+        }
+    }
+});
+
+var barkctx = document.getElementById("barkChart").getContext('2d');
+var barkChart = new Chart(barkctx, {
+    type: 'line',
+    data: {
+        labels: ["일", "월", "화", "수", "목", "금", "토"],
+        datasets: [{
+            label: '짖는 빈도',
+            data: [100, 125, 98, 102, 98, 98, 99],
+            backgroundColor: [
+                'rgba(1, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+                'rgba(1,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+      title: {
+          display: true,
+          text: '일주일간의 짖음 빈도',
+          fontSize: 20
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:false
+                }
+            }]
+        }
+    }
+});
+</script>

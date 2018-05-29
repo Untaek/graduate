@@ -1,22 +1,98 @@
 <div style="padding-left:16px">
-  <h2>{{serial}} 님 안녕하세요!</h2>
+  <h2>* 프로필 *</h2>
   <hr>
 </div>
 
 <div style="height:70%">
-  <div class="content" id="id" style="display:flex">
-    <div>
-      <ul>
-        {{#each dogs}}
-        <li>{{name}}</li>
-        {{/each}}
-      </ul>
-      <h2>강아지 프로필 </h2>
-      <img src="rabbit.svg" style="display:block" />
-      <button class="w3-button w3-white w3-border">수정</button>
-    </div>
-    <div>
-      별명: M37652
-    </div>
+  <div class="card">
+    {{#if dogs}}
+      {{#each dogs}}
+      <img src="dog.gif" alt="heeyeon" style="width:100%">
+      <h1>{{name}}</h1>
+      <p class="title">"{{#if comment}}{{comment}}{{else}}코멘트가 없습니다"{{/if}}</p>
+      <p>나이 : {{monthAge}} 개월</p>
+      <p> 종 : {{breed}}</p>
+      <p> 몸무게 : {{weight}}kg </p>
+
+      공유하기 :
+      <a href="#">
+        <i class="fa fa-dribbble" style="color: red"></i>
+      </a>
+      <a href="#">
+        <i class="fa fa-twitter" style="color: skyblue"></i>
+      </a>
+      <a href="#">
+        <i class="fa fa-linkedin" style="color: green"></i>
+      </a>
+      <a href="#">
+        <i class="fa fa-facebook" style="color: blue"></i>
+      </a>
+      <audio id="player" controls></audio>
+      <p>
+        <button id="record" onclick="recordVoice()">목소리 녹음하기</button>
+        <script>
+          function recordVoice() {
+            let shouldStop = false;
+            let stopped = false;
+            const startButton = document.getElementById('download');
+            const stopButton = document.getElementById('record');
+
+            var AudioContext = window.AudioContext // Default
+                || window.webkitAudioContext // Safari and old versions of Chrome
+                || false; 
+
+            stopButton.addEventListener('click', function() {
+              shouldStop = true;
+            })
+
+            var handleSuccess = function(stream) {
+              const options = {mimeType: 'video/webm;codecs=vp9'};
+              const recordedChunks = [];
+              const mediaRecorder = new MediaRecorder(stream, options);  
+              
+              mediaRecorder.addEventListener('dataavailable', function(e) {
+                if (e.data.size > 0) {
+                  recordedChunks.push(e.data);
+                }
+
+                if(shouldStop === true && stopped === false) {
+                  mediaRecorder.stop();
+                  stopped = true;
+                }
+              });
+
+              mediaRecorder.addEventListener('stop', function() {
+                downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
+                downloadLink.download = 'acetest.wav';
+              });
+
+              mediaRecorder.start();
+            };
+
+            navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+                .then(handleSuccess)
+            }
+        </script>
+      </p>
+      {{/each}}
+    {{else}}
+    <h2>강아지를 등록해주세요</h2>
+    <form method="POST" action="dog" style="display:block">
+      <input type="text" name="name" placeholder="이름" />
+      <select name="breed">
+        <option value="0">종 선택</option>
+        <option value="1">퍼그</option>
+        <option value="2">말티즈</option>
+        <option value="3">치와와</option>
+        <option value="4">래브라도 리트리버</option>
+      </select>
+      <div style="display:flex">
+        <input type="date" name="birth" />
+      </div>
+      <p>
+        <button>등록하기</button>
+      </p>
+    </form>
+    {{/if}}
   </div>
 </div>

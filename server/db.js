@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS tbl_device (
 `
 
 const initSQL2 = `
-CREATE TABLE IF NOT EXISTS tbl_category (
+CREATE TABLE IF NOT EXISTS tbl_breed (
   id int auto_increment,
   breed varchar(20) not null,
   primary key (id)
@@ -24,11 +24,12 @@ CREATE TABLE IF NOT EXISTS tbl_dog (
   ts timestamp default current_timestamp,
   name varchar(100) not null,
   birth datetime not null,
-  category int not null,
+  breed int not null,
   device_serial varchar(255),
+  comment varchar(100),
   primary key (id),
   foreign key (device_serial) references tbl_device(serial),
-  foreign key (category) references tbl_category(id)
+  foreign key (breed) references tbl_breed(id)
 );
 `
 
@@ -39,6 +40,15 @@ CREATE TABLE IF NOT EXISTS tbl_dog_status (
   primary key (dog_id),
   foreign key (dog_id) references tbl_dog(id)
 );
+`
+
+const initSQL5 = `
+  DELETE FROM tbl_breed;
+  ALTER TABLE tbl_breed AUTO_INCREMENT=1;
+  INSERT INTO tbl_breed (breed) VALUES ('퍼그');
+  INSERT INTO tbl_breed (breed) VALUES ('말티즈');
+  INSERT INTO tbl_breed (breed) VALUES ('치와와');
+  INSERT INTO tbl_breed (breed) VALUES ('래브라도 리트리버');
 `
 
 class RDB {
@@ -77,6 +87,7 @@ class RDB {
             reject(err)
           }
           resolve(result)
+          connection.release()
         })
       })
     })
@@ -166,6 +177,19 @@ class NoSQL {
         })*/
       }
     )
+  }
+
+  query(sql, params) {
+    return new Promise((resolve, reject) => {
+      this.bucket.query(
+        this.N1qlQuery.fromString(sql),
+        params,
+        (err, result) => {
+          if (err) reject(err)
+          resolve(result)
+        }
+      )
+    })
   }
 }
 
