@@ -23,7 +23,7 @@
     "uuid": "^3.2.1"
   },
   "scripts": {
-    "broker": "nodemon --exec npx babel-node server/mqtt/broker.js",
+    "broker": "npx babel-node server/mqtt/broker.js",
     "server": "nodemon --exec npx babel-node server/index.js"
   },
   "devDependencies": {

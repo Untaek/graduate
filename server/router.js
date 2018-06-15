@@ -101,7 +101,7 @@ router.get('/health', async (req, res) => {
       if (result.length) {
         const device_id = result[0].serial
         const sensorQuery = couch.N1qlQuery.fromString(
-          `SELECT * FROM sensor WHERE device_id = ${device_id}
+          `SELECT * FROM sensor WHERE device_id = '${device_id}'
            LIMIT 1000`
         )
         couch.bucket.query(sensorQuery, (err, result) => {
@@ -135,21 +135,25 @@ router
   .post(async (req, res) => {
     const serial = req.body.serial
     const SQL = `
-      INSERT INTO tbl_device 
-      (serial) VALUES (?)
+      UPDATE tbl_device
+      SET registered = 1
+      WHERE serial = ?
     `
     const duplCheckSQL = `
-      SELECT * FROM tbl_device
+      SELECT registered FROM tbl_device
       WHERE serial = ?      
     `
     try {
       const duplCheck = await rdb.singleQuery(duplCheckSQL, serial)
-      if (duplCheck.length > 0) {
-        res.render('register', { duplicate: true })
+      if (duplCheck.length == 0) {
+        res.render('register', { err: 'notfound' })
+        return
+      } else if (duplCheck[0].registered) {
+        res.render('register', { err: 'duplicate' })
         return
       }
 
-      const result = await rdb.singleQuery(SQL, serial)
+      await rdb.singleQuery(SQL, serial)
       res.cookie('serial', serial, {
         httpOnly: true,
         expires: new Date(Date.now() + 1000000000000)

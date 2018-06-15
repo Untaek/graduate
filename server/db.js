@@ -6,6 +6,7 @@ const initSQL = `
 CREATE TABLE IF NOT EXISTS tbl_device (
   serial varchar(255) not null,
   ts timestamp default current_timestamp,
+  registered bool default false,
   primary key (serial)
 );
 `
@@ -49,6 +50,8 @@ const initSQL5 = `
   INSERT INTO tbl_breed (breed) VALUES ('말티즈');
   INSERT INTO tbl_breed (breed) VALUES ('치와와');
   INSERT INTO tbl_breed (breed) VALUES ('래브라도 리트리버');
+  INSERT INTO tbl_breed (breed) VALUES ('골든 리트리버');
+  INSERT INTO tbl_breed (breed) VALUES ('그레이 하운드');
 `
 
 class RDB {
@@ -159,22 +162,16 @@ class NoSQL {
     const bucket = this.bucket
   }
 
-  push({ deviceID, ownerID, sensorType, measuredValue }) {
+  push(packet) {
     const bucket = this.bucket
     const id = uuid()
     bucket.insert(
       id, // key (uuid)
-      {
-        device_id: deviceID,
-        owner_id: ownerID,
-        sensor_type: sensorType,
-        measured_value: measuredValue,
-        time_stamp: new Date()
-      },
+      packet,
       (err, result) => {
-        /*bucket.get(id, (err, result) => {
+        bucket.get(id, (err, result) => {
           console.log('Inserted into couchbase\n', result)
-        })*/
+        })
       }
     )
   }

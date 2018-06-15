@@ -1,0 +1,17 @@
+#footer {
+  padding: 2em;
+  background-color: cadetblue;
+  min-height: 300px;
+}
+
+#footer > .description {
+  margin-left: 0;
+  margin-right: 0;
+  color: white;
+}
+
+#footer > .description > a {
+  font-size: 14px;
+  color: white;
+  text-decoration: underline;
+}

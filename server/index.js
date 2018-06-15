@@ -1,6 +1,5 @@
 import app from './app'
 import config from './config'
-
 import mqtt from './mqtt/app'
 import { couch, rdb } from './db'
 
