@@ -1,4 +1,4 @@
-/Users/im-untaek/Documents/Arduino/sketch_jun14a/build/core/core_esp8266_wiring_pulse.c.o: \
+/Users/im-untaek/Documents/project/graduate/arduino/ESP/build/core/core_esp8266_wiring_pulse.c.o: \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/cores/esp8266/core_esp8266_wiring_pulse.c \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/tools/sdk/libc/xtensa-lx106-elf/include/limits.h \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/tools/sdk/libc/xtensa-lx106-elf/include/newlib.h \

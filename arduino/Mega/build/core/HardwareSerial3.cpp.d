@@ -1,4 +1,4 @@
-/Users/im-untaek/Documents/Arduino/sketch_jun03a/build/core/HardwareSerial3.cpp.o: \
+/Users/im-untaek/Documents/project/graduate/arduino/Mega/build/core/HardwareSerial3.cpp.o: \
  /Users/im-untaek/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/cores/arduino/HardwareSerial3.cpp \
  /Users/im-untaek/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/cores/arduino/Arduino.h \
  /Users/im-untaek/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/cores/arduino/binary.h \

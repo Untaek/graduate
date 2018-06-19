@@ -1,9 +1,9 @@
-# 1 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino"
-# 1 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino"
-# 2 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino" 2
-# 3 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino" 2
-# 4 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino" 2
-# 5 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino" 2
+# 1 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino"
+# 1 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino"
+# 2 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino" 2
+# 3 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino" 2
+# 4 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino" 2
+# 5 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino" 2
 
 
 
@@ -73,9 +73,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  //memcpy_P(&targetData, payload, DATALEN);
   // send target value to sensor machine
-  //Serial.write(payload, length);
+  // Serial.write(payload, length);
 }
 
 void reconnect() {
@@ -122,10 +121,10 @@ void loop() {
 
   // reveive sensor data from Mega
   if(Serial.available()) {
-    const char * packet = Serial.readString().c_str();
-    //packet.toCharArray(buf, 200);
+    String packet = Serial.readString();
+    packet.toCharArray(buf, 200);
     Serial.println(topic_sensor.c_str());
-    Serial.println(packet);
-    client.publish(topic_sensor.c_str(), packet);
+    Serial.println(buf);
+    client.publish(topic_sensor.c_str(), buf);
   }
 }

@@ -1,14 +1,12 @@
-# 1 "/Users/im-untaek/Documents/Arduino/sketch_jun03a/sketch_jun03a.ino"
-# 1 "/Users/im-untaek/Documents/Arduino/sketch_jun03a/sketch_jun03a.ino"
-# 2 "/Users/im-untaek/Documents/Arduino/sketch_jun03a/sketch_jun03a.ino" 2
-# 3 "/Users/im-untaek/Documents/Arduino/sketch_jun03a/sketch_jun03a.ino" 2
-# 4 "/Users/im-untaek/Documents/Arduino/sketch_jun03a/sketch_jun03a.ino" 2
+# 1 "/Users/im-untaek/Documents/project/graduate/arduino/Mega/Mega.ino"
+# 1 "/Users/im-untaek/Documents/project/graduate/arduino/Mega/Mega.ino"
+# 2 "/Users/im-untaek/Documents/project/graduate/arduino/Mega/Mega.ino" 2
+# 3 "/Users/im-untaek/Documents/project/graduate/arduino/Mega/Mega.ino" 2
+# 4 "/Users/im-untaek/Documents/project/graduate/arduino/Mega/Mega.ino" 2
 
 
 
 
-
-DynamicJsonBuffer jsonBuffer;
 
 struct Data {
   String device_id;
@@ -52,6 +50,7 @@ void readWeight(HX711 scale, String name, int &target) {
   Serial.println(name + " average:\t" + target);
 }
 
+// 밥량 조절
 void controlMeal(int target){
   if (meal > target) {
     servo.write(0);
@@ -61,6 +60,7 @@ void controlMeal(int target){
   }
 }
 
+// 물량 조절
 void controlWater(int target){
   if(water > target) {
     digitalWrite(relayPin, 0x0);
@@ -85,6 +85,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   currentMillis = millis();
 
+  // every 1s
   if(currentMillis > prevMillis + 1000){
     prevMillis = currentMillis;
     readWeight(scale1, "meal", meal);
@@ -96,6 +97,11 @@ void loop() {
     scale1.power_up();
     scale2.power_up();
 
+    /**serialize a sensor data
+     * json[0] = meal weight
+     * json[1] = water weight
+     * json[2] = dog weight */
+    DynamicJsonBuffer jsonBuffer;
     JsonObject& root = jsonBuffer.createObject();
     JsonArray& json = root.createNestedArray("p");
     json.add(meal);
@@ -109,7 +115,7 @@ void loop() {
   controlMeal(100);
   controlWater(100);
 
-  /* DEV Not working */
+  /* DEV Not working. maybe a weight to eat place in here */
   if(Serial1.available()) {
 
   }

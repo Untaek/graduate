@@ -7,39 +7,28 @@
   <div class="card">
     {{#if dogs}}
       {{#each dogs}}
-      <img src="dog.gif" alt="heeyeon" style="width:100%">
+      <img src="{{#if picture}}{{picture}}{{else}}dog.gif{{/if}}" onerror="this.src='dog.gif';" style="width:100%">
       <h1>{{name}}</h1>
-      <p class="title">"{{#if comment}}{{comment}}{{else}}코멘트가 없습니다"{{/if}}</p>
+      <p class="title">"{{#if comment}}{{comment}}{{else}}코멘트가 없습니다{{/if}}"</p>
       <p>나이 : {{monthAge}} 개월</p>
       <p> 종 : {{breed}}</p>
-      <p> 몸무게 : {{weight}}kg </p>
+      <p style="padding-bottom: 30px"> 몸무게 : {{#if weight}}{{weight}}kg{{else}}아직 측정되지 않았습니다!{{/if}} </p>
 
-      <a href="#">
-        <i class="fa fa-dribbble" style="color: red"></i>
-      </a>
-      <a href="#">
-        <i class="fa fa-twitter" style="color: skyblue"></i>
-      </a>
-      <a href="#">
-        <i class="fa fa-linkedin" style="color: green"></i>
-      </a>
-      <a href="#">
-        <i class="fa fa-facebook" style="color: blue"></i>
-      </a>
-      <p>
-        <button id="record">정보 수정하기</button>
-      </p>
       {{/each}}
     {{else}}
     <h2>강아지를 등록해주세요</h2>
-    <form method="POST" action="dog" style="display:block">
+    <form method="POST" action="dog" style="display:block" enctype="multipart/form-data">
       <input type="text" name="name" placeholder="이름" />
       <select name="breed">
         <option value="0">종 선택</option>
         <option value="1">퍼그</option>
         <option value="2">말티즈</option>
         <option value="3">치와와</option>
-        <option value="4">래브라도 리트리버</option>
+        <option value="4">비글</option>
+        <option value="5">골든 리트리버</option>
+        <option value="6">포메나리안</option>
+        <option value="7">진돗개</option>
+        <option value="8">닥스훈트</option>
       </select>
       <div style="display:flex">
         <input id="datepicker" name="birth" placeholder="출생일" />
@@ -49,11 +38,12 @@
           })
         </script>
       </div>
-      <input placeholder="사료의 100g당 칼로리" />
+      <input type="file" name="picture" accept="image/*"/>
+      <input name="comment" placeholder="코멘트"/>
       <p>
         <button>등록하기</button>
       </p>
     </form>
     {{/if}}
   </div>
-</div>
+</div> 

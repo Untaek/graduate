@@ -33,5 +33,6 @@ app.use((err, req, res, next) => {
 })
 
 app.use(Express.static(path.resolve(__dirname, 'public')))
+app.use(Express.static(path.resolve(__dirname, 'uploads')))
 
 export default app

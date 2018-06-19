@@ -1,9 +1,30 @@
 import Express from 'express'
 import _ from 'lodash'
+import multer from 'multer'
 
 import { rdb, couch } from './db'
 
+const DEMO = true
+
 const router = Express.Router()
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'server/uploads/')
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      req.cookies.serial +
+        '_' +
+        new Date()
+          .toTimeString()
+          .split(' ')
+          .join('_') +
+        '.jpg'
+    )
+  }
+})
+const upload = multer({ storage })
 
 const getMonthAge = birthday => {
   const now = new Date()
@@ -18,7 +39,7 @@ const getMonthAge = birthday => {
 router.get('/', async (req, res) => {
   const serial = req.cookies.serial
   const SQL = `
-    SELECT tbl_dog.id AS id, ts, name, birth, tbl_breed.breed AS breed, comment
+    SELECT tbl_dog.id AS id, ts, name, birth, tbl_breed.breed AS breed, comment, picture
     FROM tbl_dog
     INNER JOIN tbl_breed ON tbl_dog.breed = tbl_breed.id
     WHERE device_serial = ?
@@ -29,19 +50,24 @@ router.get('/', async (req, res) => {
       if (result.length) {
         const promise = _.map(result, async ele => {
           ele.monthAge = getMonthAge(ele.birth)
-          ele.weight = await couch.query(
-            `SELECT measured_value FROM sensor 
+          const weight = await couch.query(
+            `SELECT weight FROM sensor 
               WHERE device_id = '${serial}' 
-              AND sensor_type = 'weight' 
-              LIMIT 1`,
+              LIMIT 5`,
             serial
           )
+          console.log(weight)
+          ele.weight = weight.reduce((acc, cur) => {
+            return acc + Number.parseFloat(cur.weight) / weight.length
+          }, 0)
+          console.log(ele.weight)
           return ele
         })
 
         Promise.all(promise).then(returnVal => {
           result = returnVal.map(dog => {
-            dog.weight = dog.weight.length ? dog.weight[0].measured_value : 0
+            dog.weight =
+              dog.weight > 0 ? Number.parseFloat(dog.weight.toFixed(2)) : 0
             return dog
           })
           console.log(result)
@@ -58,13 +84,74 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.post('/dog', async (req, res) => {
+router.get('/graph', async (req, res) => {
+  const serial = req.cookies.serial
+  console.log('/graph', serial)
+  const SQL = `
+    SELECT serial FROM tbl_device WHERE serial = ?
+  `
+
+  if (serial) {
+    try {
+      const meta = await rdb.singleQuery(SQL, serial)
+      if (meta.length) {
+        const device_id = meta[0].serial
+        const sensorQuery = `
+          SELECT meal, water, weight, time_stamp 
+          FROM sensor WHERE device_id = '${device_id}'
+          LIMIT 100`
+
+        let result = await couch.query(sensorQuery)
+        result = result.reduce(
+          (a, b, i, arr) => {
+            const today = new Date()
+            const date = new Date(b.time_stamp)
+            const day = date.getDay()
+            const weekStart =
+              Date.now() -
+              today.getDay() * 24 * 60 * 60 * 1000 -
+              today.getHours() * 60 * 60 * 1000 -
+              today.getMinutes() * 60 * 1000
+
+            if (date.getTime() > weekStart) {
+              a[day].weight += Number.parseFloat(b.weight) / result.length
+              if (i != arr.length - 1) {
+                const beforeMeal = Number.parseFloat(arr[i].meal)
+                const afterMeal = Number.parseFloat(arr[i + 1].meal)
+                a[day].meal +=
+                  beforeMeal > afterMeal ? beforeMeal - afterMeal : 0
+                const beforeWater = Number.parseFloat(arr[i].water)
+                const afterWater = Number.parseFloat(arr[i + 1].water)
+                a[day].water +=
+                  beforeWater > afterWater ? beforeWater - afterWater : 0
+              }
+            }
+            return a
+          },
+          // 7 days
+          _.times(7, () => {
+            return { weight: 0, meal: 0, water: 0 }
+          })
+        )
+        res.json(result)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  } else {
+    res.json([])
+  }
+})
+
+router.post('/dog', upload.single('picture'), async (req, res) => {
   const dog = req.body
   const serial = req.cookies.serial
   const SQL = `
-    INSERT INTO tbl_dog (name, birth, breed, device_serial)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO tbl_dog (name, birth, breed, device_serial, comment, picture)
+    VALUES (?, ?, ?, ?, ?, ?)
   `
+
+  console.log(req.file)
 
   if (serial) {
     console.log(dog, serial)
@@ -73,11 +160,13 @@ router.post('/dog', async (req, res) => {
         dog.name,
         new Date(dog.birth),
         Number.parseInt(dog.breed),
-        serial
+        serial,
+        dog.comment,
+        req.file.filename
       ])
       console.log(result)
       if (result) {
-        res.render('index')
+        res.redirect('index')
       }
     } catch (e) {
       console.log(e)
@@ -100,14 +189,17 @@ router.get('/health', async (req, res) => {
       const result = await rdb.singleQuery(SQL, serial)
       if (result.length) {
         const device_id = result[0].serial
-        const sensorQuery = couch.N1qlQuery.fromString(
-          `SELECT * FROM sensor WHERE device_id = '${device_id}'
-           LIMIT 1000`
-        )
-        couch.bucket.query(sensorQuery, (err, result) => {
-          if (err) throw err
-          res.render('health', { data: result })
-        })
+        const sensorQuery = `
+        SELECT * FROM sensor 
+        WHERE device_id = '${device_id}'
+        LIMIT 1000`
+
+        couch
+          .query(sensorQuery)
+          .then(result => {
+            res.render('health', { data: result })
+          })
+          .catch(console.log)
       }
     } catch (e) {
       console.log(e)
@@ -143,13 +235,23 @@ router
       SELECT registered FROM tbl_device
       WHERE serial = ?      
     `
+
+    if (DEMO) {
+      res.cookie('serial', serial, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 1000000000000)
+      })
+      res.redirect('/')
+      return
+    }
+
     try {
       const duplCheck = await rdb.singleQuery(duplCheckSQL, serial)
       if (duplCheck.length == 0) {
-        res.render('register', { err: 'notfound' })
+        res.render('register', { notFound: true })
         return
       } else if (duplCheck[0].registered) {
-        res.render('register', { err: 'duplicate' })
+        res.render('register', { duplicate: true })
         return
       }
 

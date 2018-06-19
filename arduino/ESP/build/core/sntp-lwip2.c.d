@@ -1,4 +1,4 @@
-/Users/im-untaek/Documents/Arduino/sketch_jun14a/build/core/sntp-lwip2.c.o: \
+/Users/im-untaek/Documents/project/graduate/arduino/ESP/build/core/sntp-lwip2.c.o: \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/cores/esp8266/sntp-lwip2.c \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/tools/sdk/lwip2/include/lwip/init.h \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/tools/sdk/lwip2/include/lwip/opt.h \

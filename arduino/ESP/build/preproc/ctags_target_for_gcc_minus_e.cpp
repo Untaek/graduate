@@ -1,9 +1,9 @@
-# 1 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino"
-# 1 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino"
-# 2 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino" 2
-# 3 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino" 2
-# 4 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino" 2
-# 5 "/Users/im-untaek/Documents/Arduino/sketch_jun14a/sketch_jun14a.ino" 2
+# 1 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino"
+# 1 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino"
+# 2 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino" 2
+# 3 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino" 2
+# 4 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino" 2
+# 5 "/Users/im-untaek/Documents/project/graduate/arduino/ESP/ESP.ino" 2
 
 
 
@@ -22,7 +22,7 @@ static struct Data targetData;
 
 const char* ssid = "409LAB-2";
 const char* password = "409bigdata";
-const char* mqttserver = "192.168.0.6";
+const char* mqttserver = "192.168.0.16";
 
 // Temporary Serial number
 const char* device_id = "931124";
@@ -73,9 +73,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  //memcpy_P(&targetData, payload, DATALEN);
   // send target value to sensor machine
-  //Serial.write(payload, length);
+  // Serial.write(payload, length);
 }
 
 void reconnect() {

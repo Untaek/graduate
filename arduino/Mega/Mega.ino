@@ -27,6 +27,8 @@ int angle = 0;
 int pumpPin = 44;
 int relayPin = 11;
 
+int micPin = A8;
+
 HX711 scale1;
 HX711 scale2;
 
@@ -68,6 +70,10 @@ void controlWater(int target){
   }
 }
 
+void readSound(){
+  Serial.println(analogRead(micPin));
+}
+
 void setup() {
   Serial.begin(115200);
   Serial1.begin(9600);
@@ -89,6 +95,7 @@ void loop() {
     readWeight(scale1, "meal", meal);
     delay(500);
     readWeight(scale2, "water", water);
+    readSound();
   
     scale1.power_down();
     scale2.power_down();

@@ -1,4 +1,4 @@
-/Users/im-untaek/Documents/Arduino/sketch_jun14a/build/core/spiffs/spiffs_nucleus.c.o: \
+/Users/im-untaek/Documents/project/graduate/arduino/ESP/build/core/spiffs/spiffs_nucleus.c.o: \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/cores/esp8266/spiffs/spiffs_nucleus.c \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/cores/esp8266/spiffs/spiffs.h \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/cores/esp8266/spiffs/spiffs_config.h \

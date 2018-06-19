@@ -20,7 +20,7 @@ static struct Data targetData;
 
 const char* ssid = "409LAB-2";
 const char* password = "409bigdata";
-const char* mqttserver = "192.168.0.6";
+const char* mqttserver = "192.168.0.16";
 
 // Temporary Serial number
 const char* device_id = "931124";

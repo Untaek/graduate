@@ -1,19 +1,105 @@
-<canvas id="mealChart" width="200" height="100"></canvas>
-<canvas id="waterChart" width="200" height="100"></canvas>
+
+<div style="padding: 5%">
 <canvas id="weightChart" width="200" height="100"></canvas>
+</div>
+<div style="padding: 5%">
+<canvas id="mealChart" width="200" height="100"></canvas>
+</div>
+
+<div style="padding: 5%">
+<canvas id="waterChart" width="200" height="100"></canvas>
+</div>
+
+<div style="padding: 5%">
 <canvas id="barkChart" width="200" height="100"></canvas>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 <script>
+    let data = []
+    fetch('/graph', {credentials: 'same-origin'})
+    .then(res => {
+        return res.json()
+    })
+    .then(json => {
+        console.log(json)
+        data = data.concat(json).map(ele => {
+            ele.weight = Number.parseFloat(ele.weight.toFixed(2))
+            ele.meal = Number.parseFloat(ele.meal.toFixed(2))
+            ele.water = Number.parseFloat(ele.water.toFixed(2))
+            return ele
+        })
+        data.map(ele => {
+            weightChart.data.datasets[0].data.push(ele.weight)
+            mealChart.data.datasets[0].data.push(ele.meal)
+            waterChart.data.datasets[0].data.push(ele.water)
+        })
+        weightChart.update()
+        mealChart.update()
+        waterChart.update()
+    })
+
+var weightctx = document.getElementById("weightChart").getContext('2d');
+var weightChart = new Chart(weightctx, {
+    type: 'line',
+    data: {
+        labels: ["일", "월", "화", "수", "목", "금", "토"],
+        datasets: [{
+            label: '체중',
+            data: [],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
+        title: {
+          display: true,
+          text: '일주일간의 몸무게 변화',
+          fontSize: 20
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: "몸무게"
+                }
+            }]
+        }
+    }
+});
 var mealctx = document.getElementById("mealChart").getContext('2d');
 var mealChart = new Chart(mealctx, {
     type: 'line',
     data: {
         labels: ["일", "월", "화", "수", "목", "금", "토"],
         datasets: [{
-            
             label: '섭취량',
-            data: [12, 12.5, 12.8, 12.3, 12.1, 12.2, 12.4],
+            data: [],
             backgroundColor: [
                 'rgba(1, 111, 111, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -41,10 +127,22 @@ var mealChart = new Chart(mealctx, {
           text: '일주일간의 식사량',
           fontSize: 20
         },
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
         scales: {
+            xAxes: [{
+                stacked: true
+            }],
             yAxes: [{
                 ticks: {
-                    beginAtZero:false
+                    beginAtZero:true
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: "일일 섭취량"
                 }
             }]
         }
@@ -57,7 +155,7 @@ var waterChart = new Chart(waterctx, {
         labels: ["일", "월", "화", "수", "목", "금", "토"],
         datasets: [{
             label: '물 섭취량',
-            data: [12, 12.5, 12.8, 12.3, 12.1, 12.2, 12.4],
+            data: [],
             backgroundColor: [
                 'rgba(100, 99, 1, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -80,59 +178,24 @@ var waterChart = new Chart(waterctx, {
         }]
     },
     options: {
-      title: {
+        title: {
           display: true,
           text: '일주일간의 물 섭취량',
           fontSize: 20
         },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:false
-                }
-            }]
-        }
-    }
-});
-var weightctx = document.getElementById("weightChart").getContext('2d');
-var weightChart = new Chart(weightctx, {
-    type: 'line',
-    data: {
-        labels: ["일", "월", "화", "수", "목", "금", "토"],
-        datasets: [{
-            label: '체중',
-            data: [12, 12.5, 12.8, 12.3, 12.1, 12.2, 12.4],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-                'rgba(255, 159, 64, 0.2)',
-            ],
-            borderWidth: 2
-        }]
-    },
-    options: {
-      title: {
-          display: true,
-          text: '일주일간의 몸무게 변화',
-          fontSize: 20
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false,
         },
         scales: {
             yAxes: [{
                 ticks: {
-                    beginAtZero:false
+                    beginAtZero:true
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: "섭취량"
                 }
             }]
         }
@@ -146,7 +209,7 @@ var barkChart = new Chart(barkctx, {
         labels: ["일", "월", "화", "수", "목", "금", "토"],
         datasets: [{
             label: '짖는 빈도',
-            data: [100, 125, 98, 102, 98, 98, 99],
+            data: [],
             backgroundColor: [
                 'rgba(1, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -174,10 +237,19 @@ var barkChart = new Chart(barkctx, {
           text: '일주일간의 짖음 빈도',
           fontSize: 20
         },
+        responsive: true,
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
         scales: {
             yAxes: [{
                 ticks: {
-                    beginAtZero:false
+                    beginAtZero:true
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: "멍멍!!"
                 }
             }]
         }

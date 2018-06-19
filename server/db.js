@@ -15,6 +15,8 @@ const initSQL2 = `
 CREATE TABLE IF NOT EXISTS tbl_breed (
   id int auto_increment,
   breed varchar(20) not null,
+  minweight float(3, 1) not null,
+  maxweight float(3, 1) not null,
   primary key (id)
 );
 `
@@ -28,6 +30,7 @@ CREATE TABLE IF NOT EXISTS tbl_dog (
   breed int not null,
   device_serial varchar(255),
   comment varchar(100),
+  picture varchar(30),
   primary key (id),
   foreign key (device_serial) references tbl_device(serial),
   foreign key (breed) references tbl_breed(id)
@@ -44,14 +47,16 @@ CREATE TABLE IF NOT EXISTS tbl_dog_status (
 `
 
 const initSQL5 = `
-  DELETE FROM tbl_breed;
-  ALTER TABLE tbl_breed AUTO_INCREMENT=1;
-  INSERT INTO tbl_breed (breed) VALUES ('퍼그');
-  INSERT INTO tbl_breed (breed) VALUES ('말티즈');
-  INSERT INTO tbl_breed (breed) VALUES ('치와와');
-  INSERT INTO tbl_breed (breed) VALUES ('래브라도 리트리버');
-  INSERT INTO tbl_breed (breed) VALUES ('골든 리트리버');
-  INSERT INTO tbl_breed (breed) VALUES ('그레이 하운드');
+DELETE FROM tbl_breed;
+ALTER TABLE tbl_breed AUTO_INCREMENT=1;
+INSERT INTO tbl_breed (breed, minweight, maxweight) VALUES ('퍼그', 6.3, 8.5);
+INSERT INTO tbl_breed (breed, minweight, maxweight) VALUES ('말티즈', 1.8, 3.2);
+INSERT INTO tbl_breed (breed, minweight, maxweight) VALUES ('치와와', 1.0, 2.7);
+INSERT INTO tbl_breed (breed, minweight, maxweight) VALUES ('비글', 7.0, 12.0);
+INSERT INTO tbl_breed (breed, minweight, maxweight) VALUES ('골든 리트리버', 25.0, 32.0);
+INSERT INTO tbl_breed (breed, minweight, maxweight) VALUES ('포메나리안', 1.4, 3.2);
+INSERT INTO tbl_breed (breed, minweight, maxweight) VALUES ('진돗개', 15.0, 19.0);
+INSERT INTO tbl_breed (breed, minweight, maxweight) VALUES ('닥스훈트', 6.5, 10.0);
 `
 
 class RDB {

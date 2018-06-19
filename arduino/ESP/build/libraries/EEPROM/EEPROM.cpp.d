@@ -1,4 +1,4 @@
-/Users/im-untaek/Documents/Arduino/sketch_jun14a/build/libraries/EEPROM/EEPROM.cpp.o: \
+/Users/im-untaek/Documents/project/graduate/arduino/ESP/build/libraries/EEPROM/EEPROM.cpp.o: \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/libraries/EEPROM/EEPROM.cpp \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/cores/esp8266/Arduino.h \
  /Users/im-untaek/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.1/tools/sdk/libc/xtensa-lx106-elf/include/stdlib.h \
