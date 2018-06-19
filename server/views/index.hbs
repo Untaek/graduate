@@ -17,9 +17,9 @@
       {{/each}}
     {{else}}
     <h2>강아지를 등록해주세요</h2>
-    <form method="POST" action="dog" style="display:block" enctype="multipart/form-data">
-      <input type="text" name="name" placeholder="이름" />
-      <select name="breed">
+    <form method="POST" action="dog" style="display:block; width: 100%" enctype="multipart/form-data">
+      <input style="margin: 0 auto" type="text" name="name" placeholder="이름">
+      <select name="breed" style="margin: 0 auto; width:50%">
         <option value="0">종 선택</option>
         <option value="1">퍼그</option>
         <option value="2">말티즈</option>
@@ -30,16 +30,14 @@
         <option value="7">진돗개</option>
         <option value="8">닥스훈트</option>
       </select>
-      <div style="display:flex">
-        <input id="datepicker" name="birth" placeholder="출생일" />
-        <script>
+      <input style="margin: 0 auto" id="datepicker" name="birth" placeholder="출생일" />
+      <script>
           $(() => {
             $('#datepicker').datepicker();
           })
-        </script>
-      </div>
-      <input type="file" name="picture" accept="image/*"/>
-      <input name="comment" placeholder="코멘트"/>
+      </script>
+      <input style="margin: 0 auto" type="file" name="picture" accept="image/*"/>
+      <input style="margin: 0 auto" name="comment" placeholder="코멘트"/>
       <p>
         <button>등록하기</button>
       </p>

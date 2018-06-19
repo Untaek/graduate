@@ -53,80 +53,91 @@ const handler = () => {
 
     const listener = async () => {
       basicSub()
+      const onTick = async () => {
+        try {
+          const meta = await rdb.singleQuery(`SELECT serial FROM tbl_device`)
+          if (meta.length) {
+            meta.forEach(async data => {
+              const serial = data.serial
+              const meals = await couch.query(
+                `SELECT meal, weight FROM sensor 
+                  WHERE device_id = '${serial}'
+                  ORDER BY time_stamp DESC
+                  LIMIT 1
+                  `
+              )
+              if (meals.length) {
+                const weight = meals[0].weight
+                const currentMeal = meals[0].meal
+
+                const apx = recommendMeal
+                  .map(ele => {
+                    return Math.abs(ele.w - weight)
+                  })
+                  .reduce(
+                    (acc, cur, i) => {
+                      return acc.diff < cur
+                        ? { index: acc.index, diff: acc.diff }
+                        : { index: i, diff: cur }
+                    },
+                    { index: 0, diff: Number.MAX_SAFE_INTEGER }
+                  )
+
+                const control = recommendMeal[apx.index]
+                const weightRatio = weight / control.w
+
+                const target = control.m * weightRatio - currentMeal
+                const meal = Number.parseInt(target.toFixed(0))
+
+                console.log(
+                  'published to',
+                  TARGET_PREFIX.concat(serial),
+                  Number.parseInt(target.toFixed(0))
+                )
+
+                mqtt.publish(
+                  TARGET_PREFIX.concat(serial),
+                  JSON.stringify({
+                    meal: meal > 0 ? meal : 0
+                  })
+                )
+              }
+            })
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      }
       const job = new cron.CronJob({
         cronTime: '00 00 10 * *',
         start: false,
         timeZone: 'Asia/Seoul',
-        onTick: async () => {
-          try {
-            const meta = await rdb.singleQuery(`SELECT serial FROM tbl_device`)
-            if (meta.length) {
-              meta.forEach(async data => {
-                const serial = data.serial
-                const meals = await couch.query(
-                  `SELECT meal, weight FROM sensor 
-                    WHERE device_id = '${serial}'
-                    ORDER BY time_stamp DESC
-                    LIMIT 1
-                    `
-                )
-                if (meals.length) {
-                  const weight = meals[0].weight
-                  const currentMeal = meals[0].meal
-
-                  const apx = recommendMeal
-                    .map(ele => {
-                      return Math.abs(ele.w - weight)
-                    })
-                    .reduce(
-                      (acc, cur, i) => {
-                        return acc.diff < cur
-                          ? { index: acc.index, diff: acc.diff }
-                          : { index: i, diff: cur }
-                      },
-                      { index: 0, diff: Number.MAX_SAFE_INTEGER }
-                    )
-
-                  const control = recommendMeal[apx.index]
-                  const weightRatio = weight / control.w
-
-                  const target = control.m * weightRatio - currentMeal
-
-                  console.log(target)
-
-                  if (target > 0) {
-                    mqtt.publish(
-                      TARGET_PREFIX.concat(serial),
-                      JSON.stringify({
-                        meal: control.m * weightRatio
-                      })
-                    )
-                  }
-                }
-              })
-            }
-          } catch (e) {
-            console.log(e)
-          }
-        }
+        onTick: onTick
       })
+      setInterval(onTick, 5000)
 
-      //job.start()
+      job.start()
     }
 
     mqtt.on('connect', listener)
-    mqtt.on('message', (topic, message) => {
+    mqtt.on('message', async (topic, message) => {
       const json = JSON.parse(message)
       if (topic === IDENTIFICATION) {
-        rdb
-          .singleQuery(`INSERT IGNORE INTO tbl_device VALUES (?, ?)`, [
-            json,
-            new Date()
-          ])
-          .then(() => {
-            mqtt.subscribe(SENSOR_PREFIX.concat(json))
-          })
-          .catch(console.log)
+        const check = await rdb.singleQuery(
+          `SELECT serial FROM tbl_device WHERE serial = ?`,
+          json
+        )
+        if (check.length) {
+          rdb
+            .singleQuery(`INSERT IGNORE INTO tbl_device VALUES (?, ?)`, [
+              json,
+              new Date()
+            ])
+            .then(() => {
+              mqtt.subscribe(SENSOR_PREFIX.concat(json))
+            })
+            .catch(console.log)
+        }
       }
       // sensor_value
       else {
@@ -137,7 +148,7 @@ const handler = () => {
           meal: json.p[0] < 0 ? 0 : json.p[0],
           water: json.p[1] < 0 ? 0 : json.p[1],
           weight: json.p[2] < 0 ? 0 : json.p[2],
-          date: new Date().getTime()
+          time_stamp: new Date().getTime()
         }
 
         doc.weight = doc.weight / 1000

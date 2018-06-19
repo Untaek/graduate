@@ -84,6 +84,10 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/information', async (req, res) => {
+  res.render('information')
+})
+
 router.get('/graph', async (req, res) => {
   const serial = req.cookies.serial
   console.log('/graph', serial)
@@ -99,6 +103,7 @@ router.get('/graph', async (req, res) => {
         const sensorQuery = `
           SELECT meal, water, weight, time_stamp 
           FROM sensor WHERE device_id = '${device_id}'
+          ORDER BY time_stamp DESC
           LIMIT 100`
 
         let result = await couch.query(sensorQuery)
@@ -133,6 +138,11 @@ router.get('/graph', async (req, res) => {
             return { weight: 0, meal: 0, water: 0 }
           })
         )
+
+        result.forEach(ele => {
+          ele.meal = ele.meal * 3
+        })
+
         res.json(result)
       }
     } catch (e) {
@@ -150,8 +160,7 @@ router.post('/dog', upload.single('picture'), async (req, res) => {
     INSERT INTO tbl_dog (name, birth, breed, device_serial, comment, picture)
     VALUES (?, ?, ?, ?, ?, ?)
   `
-
-  console.log(req.file)
+  const filename = req.file ? req.file.filename : ''
 
   if (serial) {
     console.log(dog, serial)
@@ -162,11 +171,11 @@ router.post('/dog', upload.single('picture'), async (req, res) => {
         Number.parseInt(dog.breed),
         serial,
         dog.comment,
-        req.file.filename
+        filename
       ])
       console.log(result)
       if (result) {
-        res.redirect('index')
+        res.redirect('/')
       }
     } catch (e) {
       console.log(e)
