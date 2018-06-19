@@ -18,7 +18,7 @@ struct Data {
 static struct Data sensorData;
 static struct Data targetData;
 
-const char* ssid = "409LAB-2";
+const char* ssid = "409LAB-1";
 const char* password = "409bigdata";
 const char* mqttserver = "192.168.0.16";
 
@@ -63,16 +63,16 @@ void setup_wifi() {
 void callback(char* topic, byte* payload, unsigned int length) {
   Data data;
   
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
+  //Serial.print("Message arrived [");
+  //Serial.print(topic);
+  //Serial.print("] ");
   for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
+    //Serial.print((char)payload[i]);
   }
-  Serial.println();
+  //Serial.println();
 
   // send target value to sensor machine
-  // Serial.write(payload, length);
+  Serial.write(payload, length);
 }
 
 void reconnect() {
@@ -122,7 +122,7 @@ void loop() {
     String packet = Serial.readString();
     packet.toCharArray(buf, 200);
     Serial.println(topic_sensor.c_str());
-    Serial.println(buf);
+    //Serial.println(buf);
     client.publish(topic_sensor.c_str(), buf);
   }
 }
