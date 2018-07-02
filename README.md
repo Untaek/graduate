@@ -1,12 +1,21 @@
-# DogManager (Temporary name)
+# Petsitter
 
-## Introduction
+Feeding pets automating system. Gather sensor data from embedded device (Arduino) using MQTT protocol periodically. And then, feed optimal amount from the calculated sensor values. Pet owner can see pet’s current status in web site.
 
-Feeding pets automating system. Gather sensor data from embedded device using MQTT protocol periodically. And then, feed optimal amount from the calculated sensor values.
+## Requirement
+* Mysql
+* Redis
+* Couchbase
+* Nodejs, Npm
+* Arduino ESP8266 board, Arduino Mega, and Components that make up a Feeding machine like a sensor, servo motor, water pump etc.
 
-## Prerequisition
-- mysql
-- couchbase
-- nodejs, npm
+## How to start
+1. npm run broker
+2. npm run server
+3. power on the Arduino.
+4. connect http://localhost:3001/
 
-This reposiratory is made for senier project
+## Who made this game?
+Untaek, Sejun, Heeyeon
+
+This reposiratory is made for senier project.

@@ -15,8 +15,6 @@ const initSQL2 = `
 CREATE TABLE IF NOT EXISTS tbl_breed (
   id int auto_increment,
   breed varchar(20) not null,
-  minweight float(3, 1) not null,
-  maxweight float(3, 1) not null,
   primary key (id)
 );
 `
