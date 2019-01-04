@@ -9,6 +9,11 @@ Feeding pets automating system. Gather sensor data from embedded device (Arduino
 * Nodejs, Npm
 * Arduino ESP8266 board, Arduino Mega, and Components that make up a Feeding machine like a sensor, servo motor, water pump etc.
 
+## Details
+- [Detailed report link](https://github.com/Untaek/graduate/blob/master/senior%20project%20report1.pdf)
+- [Simple report link](https://github.com/Untaek/graduate/blob/master/senior%20project%20presentation.pdf)
+
+
 ## How to start
 1. npm run broker
 2. npm run server
